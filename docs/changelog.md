@@ -1,7 +1,86 @@
 # Changelog
 
-All notable changes to PromptMaster are documented here.
+All notable changes to Social Media Growth OS are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+---
+
+## [2.0.0] — 2026-06-07
+
+### 🚀 Complete Rebrand & Expansion
+
+#### Changed — Rebrand
+- **PromptMaster** → **Social Media Growth OS**
+- All UI references updated (title, nav, login, footer)
+- GitHub repo and package.json updated
+- "module" → "agent" across all UI text
+
+#### Added — 6 New AI Agents (Total: 12)
+- Content Calendar Generator — 30-day content plans
+- Hashtag & SEO Strategy — tiered hashtag research
+- Bio & Profile Optimizer — 5 bio variations + SEO
+- Competitor Analysis — competitive intelligence
+- Caption Rewriter — 5 tone variations
+- DM / Outreach Script Generator — cold/warm/bold scripts
+
+#### Added — Reference Module
+- 20 High-Converting ChatGPT Image Prompts for Brands
+- Category selector → generates specific prompt
+- Inline Copy/Save buttons next to each prompt title
+
+#### Added — Session History (Save/Load/Delete)
+- 💾 Save button after every generation
+- 📁 Saved view in sidebar with cards list
+- 📂 Load restores any saved session
+- 🗑 Delete removes individual sessions
+- Stored in localStorage — persists across browser sessions
+- Saved count badge on sidebar nav item
+
+#### Changed — AI Provider
+- **DeepSeek only** — removed Claude/Anthropic SDK
+- No user API key input — server-side key only
+- Simplified settings to just model selector (V3 / R1)
+- Removed `@anthropic-ai/sdk` dependency
+
+#### Changed — Authentication
+- Admin login: username (`admin`) + password
+- Default password removed from login hint
+- Change Password feature in Settings (stored in `data/config.json`)
+- Password visibility toggle (👁) on all password fields
+- Login supports Enter key on both username and password fields
+
+#### Changed — UI Theme
+- Navy dark background (`#0d1117`)
+- Light blue accent (`#3B82F6`)
+- Inter font throughout
+- Clean, professional social media platform aesthetic
+- Dynamic sidebar nav generated from agent list
+- 12/12 completed counter on dashboard
+
+#### Changed — Landing Page
+- Accurate hero stats: "Free To Start" not "Free Forever"
+- Removed AI model names (DeepSeek/Claude) from UI
+- Cleaner hero subtitle without aggressive language
+- All pricing and feature copy updated for accuracy
+
+#### Added — UI/UX Design Reference
+- Full design system: 107 styles, 127 palettes, 107 font pairings
+- Saved as `docs/ui-ux-design-reference.md`
+- Referenced in both CLAUDE.md and deepseek-guide.md
+- Source: saifyxpro/ui-ux-design-pro-skill
+
+#### Changed — Documentation
+- `docs/deepseek-guide.md` now serves as full global CLAUDE.md equivalent
+- Contains: workflow preferences, dev standards, security standards, UI/UX reference
+- CLAUDE.md updated with UI/UX reference section
+
+#### Removed
+- All "PromptMaster" branding from UI
+- All AI model names (DeepSeek/Claude/Anthropic) from landing page
+- `@anthropic-ai/sdk` npm dependency
+- API key input fields (users no longer need to enter keys)
+- Provider selector (Claude/DeepSeek toggle removed)
+- "Free Forever" misleading language
 
 ---
 

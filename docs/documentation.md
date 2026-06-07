@@ -1,6 +1,6 @@
-# PromptMaster — Documentation
+# Social Media Growth OS — Documentation
 
-> Free AI Social Media Agency | v1.3.0 | Anthropic Claude + DeepSeek
+> AI-Powered Social Media Platform | v2.0.0 | Powered by DeepSeek
 
 ---
 

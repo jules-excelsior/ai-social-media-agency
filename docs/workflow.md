@@ -1,8 +1,8 @@
-# PromptMaster — System Workflow
+# Social Media Growth OS — System Workflow
 
 ## Overview
 
-PromptMaster is a six-module AI Social Media Agency platform that connects users to AI APIs (Anthropic Claude and DeepSeek) through a secure Express proxy. Each module collects structured inputs, constructs an optimized prompt pair, streams the response in real time, and renders output as formatted markdown.
+Social Media Growth OS is a 12-agent AI-powered social media platform that connects users to DeepSeek AI through a secure Express proxy. Each agent collects structured inputs, constructs an optimized prompt, streams the response in real time, and renders output as formatted markdown.
 
 The platform supports two user roles: **Users** (registered via the landing page) and **Admins** (password-protected management access). User data is persisted server-side in JSON files inside `/data/`.
 
