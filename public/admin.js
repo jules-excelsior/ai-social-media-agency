@@ -97,6 +97,7 @@ const btnText       = document.getElementById('btn-text');
 const btnSpinner    = document.getElementById('btn-spinner');
 const btnClear      = document.getElementById('btn-clear');
 const btnCopy       = document.getElementById('btn-copy');
+const btnSave       = document.getElementById('btn-save');
 const outputPlaceholder = document.getElementById('output-placeholder');
 const outputContent = document.getElementById('output-content');
 const statusDot     = document.getElementById('status-dot');
@@ -221,6 +222,7 @@ function buildNavHandlers() {
     const view = btn.dataset.view;
     btn.onclick = () => {
       if (view === 'overview') switchView('overview');
+      if (view === 'saved')    openSaved();
       if (view === 'module')   openModule(btn.dataset.id);
       setActiveNav(btn);
     };
@@ -241,6 +243,8 @@ function setActiveNav(target) {
 function switchView(name) {
   viewOverview.classList.toggle('active', name === 'overview');
   viewModule.classList.toggle('active',   name === 'module');
+  const vs = document.getElementById('view-saved');
+  if (vs) vs.classList.toggle('active', name === 'saved');
 }
 
 /* ── Open Module ─────────────────────────────────────────── */
@@ -292,6 +296,7 @@ function buildInputs(m) {
 btnGenerate.onclick = generate;
 btnClear.onclick    = clearOutput;
 btnCopy.onclick     = copyOutput;
+btnSave.onclick     = saveSession;
 
 async function generate() {
   if (isGenerating) return;
@@ -328,7 +333,7 @@ function renderStreaming(text) {
 function renderFinal(text) {
   outputContent.style.whiteSpace = '';
   outputContent.innerHTML = window.marked ? marked.parse(text) : escapeHtml(text).replace(/\n/g,'<br>');
-  btnCopy.classList.remove('hidden'); btnClear.classList.remove('hidden');
+  btnCopy.classList.remove('hidden'); btnSave.classList.remove('hidden'); btnClear.classList.remove('hidden');
 }
 function renderError(msg) {
   outputContent.classList.remove('hidden'); outputPlaceholder.classList.add('hidden');
@@ -336,7 +341,7 @@ function renderError(msg) {
   outputContent.innerHTML = `<span style="color:#ef4444">⚠ Error: ${escapeHtml(msg)}</span>`;
 }
 function showOutputArea() { outputContent.classList.remove('hidden'); outputPlaceholder.classList.add('hidden'); outputContent.innerHTML = ''; }
-function clearOutput() { outputContent.classList.add('hidden'); outputContent.innerHTML = ''; outputPlaceholder.classList.remove('hidden'); btnCopy.classList.add('hidden'); btnClear.classList.add('hidden'); fullOutput = ''; }
+function clearOutput() { outputContent.classList.add('hidden'); outputContent.innerHTML = ''; outputPlaceholder.classList.remove('hidden'); btnCopy.classList.add('hidden'); btnSave.classList.add('hidden'); btnClear.classList.add('hidden'); fullOutput = ''; }
 function setGenerating(state) { isGenerating = state; btnGenerate.disabled = state; btnText.classList.toggle('hidden', state); btnSpinner.classList.toggle('hidden', !state); }
 function copyOutput() {
   if (!fullOutput) return;
@@ -346,6 +351,109 @@ function markDone(id) {
   completedIds.add(id); localStorage.setItem('pm_done', JSON.stringify([...completedIds]));
   document.querySelectorAll(`.nav-item[data-id="${id}"]`).forEach(b => b.classList.add('done'));
   updateStats(); buildModuleGrid();
+}
+
+/* ── Saved Sessions ──────────────────────────────────────── */
+function getSessions() {
+  return JSON.parse(localStorage.getItem('pm_sessions') || '[]');
+}
+
+function saveSessions(sessions) {
+  localStorage.setItem('pm_sessions', JSON.stringify(sessions));
+  updateSavedCount(sessions.length);
+}
+
+function updateSavedCount(count) {
+  const badge = document.getElementById('saved-count');
+  const header = document.getElementById('saved-count-header');
+  if (badge) badge.textContent = count;
+  if (header) header.textContent = count;
+}
+
+function saveSession() {
+  if (!fullOutput || !activeModuleId) return;
+  const m = MODULES.find(x => x.id === activeModuleId);
+  if (!m) return;
+  const sessions = getSessions();
+  const ts = new Date();
+  const session = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    moduleId: m.id,
+    moduleName: m.name,
+    moduleIcon: m.icon,
+    timestamp: ts.toISOString(),
+    date: ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    output: fullOutput
+  };
+  sessions.unshift(session);
+  saveSessions(sessions);
+  btnSave.textContent = '✓ Saved!';
+  btnSave.classList.add('copied');
+  setTimeout(() => { btnSave.textContent = '💾 Save'; btnSave.classList.remove('copied'); }, 2000);
+}
+
+function openSaved() {
+  switchView('saved');
+  const list = document.getElementById('saved-list');
+  const empty = document.getElementById('saved-empty');
+  if (!list) return;
+  const sessions = getSessions();
+  if (sessions.length === 0) {
+    list.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  if (empty) empty.classList.add('hidden');
+  list.innerHTML = sessions.map(s => `
+    <div class="saved-card" data-id="${s.id}">
+      <div class="sc-top">
+        <div class="sc-icon">${s.moduleIcon}</div>
+        <div class="sc-info">
+          <div class="sc-name">${s.moduleName}</div>
+          <div class="sc-date">${s.date}</div>
+        </div>
+      </div>
+      <div class="sc-preview">${escapeHtml(s.output.slice(0, 120))}${s.output.length > 120 ? '…' : ''}</div>
+      <div class="sc-actions">
+        <button class="sc-btn sc-load" data-id="${s.id}">📂 Load</button>
+        <button class="sc-btn sc-del" data-id="${s.id}">🗑 Delete</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Wire Load buttons
+  list.querySelectorAll('.sc-load').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      loadSession(btn.dataset.id);
+    };
+  });
+  // Wire Delete buttons
+  list.querySelectorAll('.sc-del').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      deleteSession(btn.dataset.id);
+    };
+  });
+}
+
+function loadSession(id) {
+  const sessions = getSessions();
+  const s = sessions.find(x => x.id === id);
+  if (!s) return;
+  // Open the module
+  openModule(s.moduleId);
+  // Set the output
+  fullOutput = s.output;
+  showOutputArea();
+  renderFinal(s.output);
+}
+
+function deleteSession(id) {
+  let sessions = getSessions();
+  sessions = sessions.filter(x => x.id !== id);
+  saveSessions(sessions);
+  openSaved(); // Re-render
 }
 
 /* ── Doc Drawer ──────────────────────────────────────────── */

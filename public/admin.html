@@ -103,6 +103,10 @@
           <span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span>
         </button>
 
+        <button class="nav-item" data-view="saved">
+          <span class="nav-icon">📁</span><span class="nav-label">Saved</span><span class="nav-badge" id="saved-count">0</span>
+        </button>
+
         <div class="nav-section">AI MODULES</div>
 
         <button class="nav-item" data-view="module" data-id="growth-strategy">
@@ -150,6 +154,25 @@
         <div class="module-grid" id="module-grid"></div>
       </div>
 
+      <!-- Saved View -->
+      <div id="view-saved" class="view">
+        <div class="overview-header">
+          <div>
+            <h1>📁 Saved Sessions</h1>
+            <p class="overview-sub">Your previously generated content. Click to load or delete.</p>
+          </div>
+          <div class="overview-stats">
+            <div class="stat-pill"><span id="saved-count-header">0</span> saved</div>
+          </div>
+        </div>
+        <div id="saved-list" class="saved-list"></div>
+        <div id="saved-empty" class="saved-empty hidden">
+          <div class="ph-icon" style="font-size:48px;opacity:.15;margin-bottom:16px">📁</div>
+          <h3 style="font-family:var(--font);font-size:18px;font-weight:600;color:var(--muted)">No saved sessions yet</h3>
+          <p style="color:var(--muted2);font-size:13px;margin-top:6px">Generate content from any module, then click Save to keep it here.</p>
+        </div>
+      </div>
+
       <!-- Module View -->
       <div id="view-module" class="view">
         <div class="module-header" id="module-header">
@@ -172,6 +195,7 @@
           <div class="output-col">
             <div class="output-topbar">
               <span class="panel-label">Output</span>
+              <button class="small-btn hidden" id="btn-save">💾 Save</button>
               <button class="small-btn hidden" id="btn-copy">Copy</button>
             </div>
             <div class="output-box" id="output-box">
