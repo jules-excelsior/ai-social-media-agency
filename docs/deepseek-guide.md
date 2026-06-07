@@ -140,15 +140,72 @@ Diagnose the likely causes and provide a 14-day recovery plan.
 
 ## UI/UX Design Reference
 
-A comprehensive design reference (107 styles, 127 palettes, 107 font pairings) is available at:
-- **Project file**: `docs/ui-ux-design-reference.md`
-- **Source repo**: [saifyxpro/ui-ux-design-pro-skill](https://github.com/saifyxpro/ui-ux-design-pro-skill)
+> Source: [saifyxpro/ui-ux-design-pro-skill](https://github.com/saifyxpro/ui-ux-design-pro-skill)
+> 107 styles · 127 palettes · 107 font pairings · 150+ reasoning rules
 
-Key design directions for social media platforms:
-- **Dark Mode (OLED)** — deep navy backgrounds, vibrant accent colors, eye-friendly
-- **Vibrant & Block-based** — bold layouts, high contrast, geometric shapes
-- **Motion-Driven** — scroll animations, microinteractions, smooth transitions
-- **Micro-interactions** — tactile feedback, hover states, loading animations
+---
+
+### Design Directions
+
+| Direction | Feel | Best For |
+|-----------|------|----------|
+| **Precision & Density** | Tight, technical, monochrome | Dev tools, admin dashboards |
+| **Warmth & Approachability** | Generous spacing, soft shadows | Collaborative tools, consumer apps |
+| **Sophistication & Trust** | Cool tones, layered depth | Finance, enterprise B2B |
+| **Boldness & Clarity** | High contrast, dramatic space | Modern dashboards, data-heavy |
+| **Dark Mode (OLED)** | Deep black, vibrant accents | Night-mode apps, social media |
+| **Vibrant & Block-based** | Bold, energetic, playful | Startups, social media, gaming |
+| **Motion-Driven** | Animation-heavy, scroll effects | Portfolios, storytelling, social |
+| **Micro-interactions** | Tactile feedback, gestures | Mobile apps, touchscreen UIs |
+
+### Craft Principles
+
+**Surface Elevation** — Stack surfaces: base → cards → dropdowns → overlays. Dark mode: higher elevation = slightly lighter.
+
+**Borders** — Low opacity rgba blends with background. Progression: default → subtle → strong → focus rings.
+
+**Depth Strategy** — Pick ONE: borders-only (dense), subtle shadows (approachable), layered shadows (premium), surface shifts (tints).
+
+**Color Meaning** — Gray builds structure. Color communicates. One accent color with intention beats five without thought.
+
+### Token Architecture
+
+- **Text**: primary → secondary → tertiary → muted (4 levels)
+- **Borders**: default → subtle → strong → strongest (4 levels)
+- **Spacing base**: 4px or 8px multiples
+- **Animation**: micro 150ms, modals 250ms, GPU-friendly (transform + opacity only)
+
+### Color Palettes by Industry
+
+| Industry | Primary Hex | Tone |
+|----------|------------|------|
+| Fintech | `#2563EB` | Professional, Trust |
+| Healthcare | `#059669` | Calm, Healing |
+| E-commerce | `#DC2626` | Urgency, Energy |
+| SaaS | `#7C3AED` | Modern, Creative |
+| Education | `#2563EB` | Trust, Learning |
+| Gaming | `#EF4444` | Energy, Excitement |
+| Social Media | `#4F9CF9` | Vibrant, Engaging |
+| Startup | `#8B5CF6` | Innovative, Bold |
+
+### Font Pairings
+
+| Pairing | Heading | Body | Mood |
+|---------|---------|------|------|
+| Classic Professional | Inter | Inter | Clean, Modern |
+| Premium Editorial | Playfair Display | Source Sans Pro | Luxury, Trust |
+| Modern SaaS | DM Sans | DM Sans | Friendly, Clean |
+| Tech/Dev | JetBrains Mono | Inter | Technical, Precise |
+| Social Media | Inter | Inter | Clean, Readable |
+| Minimal | Cabinet Grotesk | Archivo | Clean, Bold |
+
+### Accessibility Minimums
+
+- Text contrast: 4.5:1 (AA), 7:1 (AAA)
+- Touch targets: 44x44px minimum
+- Focus-visible: 3-4px ring
+- Keyboard navigation for every action
+- `prefers-reduced-motion` respected
 
 ---
 
