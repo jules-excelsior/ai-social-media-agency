@@ -5,8 +5,8 @@ const MODULES = [
   {
     id: 'growth-strategy',
     name: 'Growth Strategy Commander',
-    icon: '⚡', color: '#4f9cf9',
-    gradient: 'linear-gradient(135deg,#4f9cf9,#60a5fa)',
+    icon: '⚡', color: '#E11D48',
+    gradient: 'linear-gradient(135deg,#E11D48,#FB7185)',
     desc: 'Elite social media manager mode — audience psychology, platform algorithms, viral distribution & scalable content ops.',
     inputs: [
       { id: 'niche',    label: 'Your Niche',  type: 'text',   ph: 'e.g., fitness coaching, SaaS, personal finance' },
@@ -19,8 +19,8 @@ const MODULES = [
   {
     id: 'audience-psychology',
     name: 'Audience Psychology Decoder',
-    icon: '🧠', color: '#60a5fa',
-    gradient: 'linear-gradient(135deg,#60a5fa,#93c5fd)',
+    icon: '🧠', color: '#FB7185',
+    gradient: 'linear-gradient(135deg,#FB7185,#FDA4AF)',
     desc: 'Deep audience analysis — desires, frustrations, emotional triggers, attention patterns & psychological motivations.',
     inputs: [{ id: 'niche', label: 'Your Niche', type: 'text', ph: 'e.g., online fitness coaching, B2B SaaS, crypto investing' }],
     system: 'You are an expert audience psychologist. Use markdown with clear section headers.',
@@ -29,8 +29,8 @@ const MODULES = [
   {
     id: 'viral-content',
     name: 'Viral Content Idea Engine',
-    icon: '🚀', color: '#2563eb',
-    gradient: 'linear-gradient(135deg,#2563eb,#4f9cf9)',
+    icon: '🚀', color: '#BE123C',
+    gradient: 'linear-gradient(135deg,#BE123C,#E11D48)',
     desc: 'Generate 30 highly engaging content ideas using curiosity triggers, emotional reactions & proven viral frameworks.',
     inputs: [{ id: 'niche', label: 'Your Niche', type: 'text', ph: 'e.g., productivity for entrepreneurs, vegan recipes, web design' }],
     system: 'You are a viral content strategist. Generate specific, high-potential ideas in clear markdown sections.',
@@ -39,8 +39,8 @@ const MODULES = [
   {
     id: 'hook-engineering',
     name: 'Hook Engineering Lab',
-    icon: '🎯', color: '#3b82f6',
-    gradient: 'linear-gradient(135deg,#3b82f6,#4f9cf9)',
+    icon: '🎯', color: '#E11D48',
+    gradient: 'linear-gradient(135deg,#E11D48,#FB7185)',
     desc: 'Scroll-stopping opening hooks engineered to capture attention instantly using psychology & proven triggers.',
     inputs: [{ id: 'niche', label: 'Your Niche', type: 'text', ph: 'e.g., real estate investing, mindset coaching, AI tools' }],
     system: 'You are a master copywriter and hook engineer. Write powerful, copy-ready hooks in clear markdown sections.',
@@ -49,8 +49,8 @@ const MODULES = [
   {
     id: 'algorithm-strategy',
     name: 'Algorithm Intelligence Briefing',
-    icon: '📡', color: '#6366f1',
-    gradient: 'linear-gradient(135deg,#6366f1,#60a5fa)',
+    icon: '📡', color: '#FB7185',
+    gradient: 'linear-gradient(135deg,#FB7185,#F43F5E)',
     desc: 'Platform-specific algorithm playbook for maximum organic reach, distribution & visibility.',
     inputs: [
       { id: 'platform', label: 'Platform', type: 'select', opts: ['Instagram','TikTok','YouTube','LinkedIn','Twitter/X','Facebook','Pinterest','Threads'] },
@@ -62,8 +62,8 @@ const MODULES = [
   {
     id: 'content-repurposing',
     name: 'Content Repurposing Multiplier',
-    icon: '♻️', color: '#818cf8',
-    gradient: 'linear-gradient(135deg,#818cf8,#a5b4fc)',
+    icon: '♻️', color: '#F43F5E',
+    gradient: 'linear-gradient(135deg,#F43F5E,#FDA4AF)',
     desc: 'Transform one content idea into 6+ platform-native formats for scalable, high-output content production.',
     inputs: [{ id: 'content', label: 'Your Content Idea', type: 'textarea', ph: 'Paste your content idea, topic, script, or core message here…' }],
     system: 'You are a content repurposing strategist. Use markdown ## headers for each format.',
