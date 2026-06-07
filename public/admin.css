@@ -6,7 +6,7 @@
   --bg:#0d1117; --surface:#10141e; --card:#131820;
   --border:rgba(255,255,255,.065); --border2:rgba(255,255,255,.11);
   --text:#e2e8f0; --muted:#6b7fa3; --muted2:#3a4a6a;
-  --blue:#E11D48; --blue-light:#FB7185; --blue-dark:#BE123C;
+  --accent:#E11D48; --accent-light:#FB7185; --accent-dark:#BE123C;
   --purple:#8b5cf6; --green:#22c55e; --red:#ef4444;
   --header-h:62px; --sidebar-w:236px; --radius:12px;
   --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
@@ -261,7 +261,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.7;}
 .output-content h1,.output-content h2{font-size:20px;font-weight:600;margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid rgba(225,29,72,.1);letter-spacing:.01em;}
 .output-content h1:first-child,.output-content h2:first-child{margin-top:0;}
 .output-content h3{font-size:16px;font-weight:600;color:var(--accent);margin:18px 0 8px;}
-.output-content h4{font-size:12px;font-weight:700;color:var(--blue-light);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.06em;}
+.output-content h4{font-size:12px;font-weight:700;color:var(--accent-light);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.06em;}
 .output-content strong{font-weight:700;color:rgba(240,236,224,.92);}
 .output-content em{color:rgba(240,236,224,.72);font-style:italic;}
 .output-content ul,.output-content ol{padding-left:20px;margin:9px 0;}
@@ -293,7 +293,7 @@ textarea{resize:vertical;min-height:100px;line-height:1.7;}
 .docs-body h1{font-size:28px;font-weight:600;margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid rgba(225,29,72,.1);letter-spacing:.01em;}
 .docs-body h2{font-size:20px;font-weight:600;margin:30px 0 10px;padding-bottom:7px;border-bottom:1px solid rgba(225,29,72,.08);letter-spacing:.01em;}
 .docs-body h3{font-size:16px;font-weight:600;color:var(--accent);margin:22px 0 8px;}
-.docs-body h4{font-size:13px;font-weight:700;color:var(--blue-light);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em;}
+.docs-body h4{font-size:13px;font-weight:700;color:var(--accent-light);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em;}
 .docs-body p{font-size:14px;line-height:1.92;color:rgba(240,236,224,.68);margin:8px 0;font-weight:400;}
 .docs-body ul,.docs-body ol{padding-left:22px;margin:10px 0;}
 .docs-body li{font-size:14px;line-height:1.88;color:rgba(240,236,224,.68);margin:5px 0;font-weight:400;}
