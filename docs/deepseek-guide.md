@@ -138,6 +138,20 @@ Diagnose the likely causes and provide a 14-day recovery plan.
 
 ---
 
+## UI/UX Design Reference
+
+A comprehensive design reference (107 styles, 127 palettes, 107 font pairings) is available at:
+- **Project file**: `docs/ui-ux-design-reference.md`
+- **Source repo**: [saifyxpro/ui-ux-design-pro-skill](https://github.com/saifyxpro/ui-ux-design-pro-skill)
+
+Key design directions for social media platforms:
+- **Dark Mode (OLED)** — deep navy backgrounds, vibrant accent colors, eye-friendly
+- **Vibrant & Block-based** — bold layouts, high contrast, geometric shapes
+- **Motion-Driven** — scroll animations, microinteractions, smooth transitions
+- **Micro-interactions** — tactile feedback, hover states, loading animations
+
+---
+
 ## Getting Started with DeepSeek
 
 1. Sign up at [platform.deepseek.com](https://platform.deepseek.com)

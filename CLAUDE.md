@@ -371,6 +371,21 @@ How I build operational software using AI-assisted development. I start from the
 
 ---
 
+### UI/UX Design Reference
+
+A comprehensive design reference is available at **`docs/ui-ux-design-reference.md`** (107 styles, 127 palettes, 107 font pairings).
+
+**Source:** [saifyxpro/ui-ux-design-pro-skill](https://github.com/saifyxpro/ui-ux-design-pro-skill) — 150+ reasoning rules, 18 platform templates
+
+When designing UI, read `docs/ui-ux-design-reference.md` for:
+1. Design direction — match the product's feel
+2. Color palette — industry-appropriate
+3. Font pairing — mood-matched typography
+4. Surface elevation strategy — borders vs shadows vs tints
+5. Token architecture — text levels, border levels, spacing
+6. Accessibility minimums — WCAG AA/AAA
+
+---
 
 ### Currency Rules
 
