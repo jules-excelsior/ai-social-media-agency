@@ -18,9 +18,13 @@
     <h1>Welcome Back</h1>
     <p class="login-sub">Sign in to your AI Social Media Agency Dashboard</p>
     <div class="form-group">
-      <label for="pw-input">Dashboard Password</label>
+      <label for="user-input">Username or Email</label>
+      <input type="text" id="user-input" placeholder="Enter username or email" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label for="pw-input">Password</label>
       <div class="pw-wrap">
-        <input type="password" id="pw-input" placeholder="Enter password…" autocomplete="current-password"/>
+        <input type="password" id="pw-input" placeholder="Enter password" autocomplete="current-password"/>
         <button class="icon-btn" id="toggle-pw">👁</button>
       </div>
     </div>
@@ -53,15 +57,24 @@
       <h3>🔑 Change Password</h3>
       <div class="form-group">
         <label for="cp-old">Current Password</label>
-        <input type="password" id="cp-old" placeholder="Enter current password" autocomplete="current-password"/>
+        <div class="pw-wrap">
+          <input type="password" id="cp-old" placeholder="Enter current password" autocomplete="current-password"/>
+          <button class="icon-btn" id="toggle-cp-old">👁</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="cp-new">New Password</label>
-        <input type="password" id="cp-new" placeholder="Enter new password (min. 6 characters)" autocomplete="new-password"/>
+        <div class="pw-wrap">
+          <input type="password" id="cp-new" placeholder="Enter new password (min. 6 characters)" autocomplete="new-password"/>
+          <button class="icon-btn" id="toggle-cp-new">👁</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="cp-confirm">Confirm New Password</label>
-        <input type="password" id="cp-confirm" placeholder="Confirm new password" autocomplete="new-password"/>
+        <div class="pw-wrap">
+          <input type="password" id="cp-confirm" placeholder="Confirm new password" autocomplete="new-password"/>
+          <button class="icon-btn" id="toggle-cp-confirm">👁</button>
+        </div>
       </div>
       <p class="cp-error hidden" id="cp-error"></p>
       <p class="cp-success hidden" id="cp-success">✓ Password changed successfully</p>
@@ -147,6 +160,12 @@
         </button>
         <button class="nav-item" data-view="module" data-id="content-repurposing">
           <span class="nav-icon">♻️</span><span class="nav-label">Content Repurposing</span><span class="nav-check">✓</span>
+        </button>
+
+        <div class="nav-section">REFERENCE</div>
+
+        <button class="nav-item" data-view="module" data-id="image-prompts">
+          <span class="nav-icon">🖼️</span><span class="nav-label">Image Prompts</span><span class="nav-check">✓</span>
         </button>
       </nav>
 

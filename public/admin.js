@@ -68,6 +68,124 @@ const MODULES = [
     inputs: [{ id: 'content', label: 'Your Content Idea', type: 'textarea', ph: 'Paste your content idea, topic, script, or core message here…' }],
     system: 'You are a content repurposing strategist. Use markdown ## headers for each format.',
     prompt: (v) => `Repurpose this into 6 platform-specific formats:\n\n**Original Idea:**\n${v.content}\n\n## 1. Short-Form Video Script (TikTok/Reels/Shorts)\n## 2. Carousel Post (Instagram/LinkedIn)\n## 3. Long-Form Caption (Instagram/Facebook)\n## 4. Twitter/X Thread\n## 5. LinkedIn Post\n## 6. Engagement Bait Post\n\nEach format: platform-native and copy-ready.`
+  },
+  {
+    id: 'image-prompts',
+    name: '20 High-Converting ChatGPT Image Prompts for Brands',
+    icon: '🖼️', color: '#3B82F6',
+    gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
+    desc: '20 ready-to-use image generation prompts for product photography, branding, social media, and marketing visuals. Click a category to copy the prompt.',
+    isReference: true,
+    inputs: [],
+    system: '',
+    prompt: () => ``,
+    referenceContent: `## 🖼️ 20 High-Converting ChatGPT Image Prompts for Brands
+
+---
+
+### 1. 🎨 Background Removal (Clean Commercial Cutout)
+\`\`\`
+Remove the background from the attached image. Preserve the original subject exactly as photographed, including edges, textures, shadows, and fine details. Create a clean transparent background with professional cutout accuracy. Avoid halos, blur, color contamination, or artificial smoothing. Maintain original resolution and proportions. Suitable for ecommerce, catalogs, and marketing materials.
+\`\`\`
+
+### 2. 📦 Product Mockup Placement
+\`\`\`
+Place the attached product into a realistic studio mockup environment. Use professional lighting, realistic shadows, and natural reflections. Match the original perspective and scale. Do not alter product color, shape, branding, or materials. The final image should resemble a professional product photoshoot.
+\`\`\`
+
+### 3. 💎 Luxury Brand Visual
+\`\`\`
+Create a premium branding image using the attached product. Use minimalist composition, elegant lighting, and refined visual balance. Highlight craftsmanship, texture, and material quality. Avoid text, logos, and promotional graphics. Suitable for luxury brand websites and presentations.
+\`\`\`
+
+### 4. 🎨 Product Color Variations
+\`\`\`
+Generate multiple realistic color and finish variations of the attached product. Keep geometry, perspective, lighting, and proportions identical. Change only colors and surface finishes. Ensure each variation appears naturally manufactured.
+\`\`\`
+
+### 5. 📱 Social Media Creative
+\`\`\`
+Create an organic social media image using the attached product. Use natural lighting and modern composition. Avoid sales-heavy visuals, badges, or promotional clutter. Focus on authenticity and visual appeal.
+\`\`\`
+
+### 6. 🔄 Before and After Comparison
+\`\`\`
+Create a realistic before-and-after comparison using the attached product. Use identical environments, lighting, and camera angles. Present a believable transformation without exaggeration.
+\`\`\`
+
+### 7. 🏠 Lifestyle Scene Integration
+\`\`\`
+Place the attached product into a realistic lifestyle environment where it would naturally be used. Match shadows, lighting, and perspective. Maintain authenticity and visual realism.
+\`\`\`
+
+### 8. 🌐 Website Hero Banner
+\`\`\`
+Create a homepage hero banner featuring the attached product. Use clean composition, premium lighting, and sufficient negative space for future marketing copy. Make the product the primary focal point.
+\`\`\`
+
+### 9. 🔍 Exploded Product View
+\`\`\`
+Create a professional exploded-view visualization of the attached product. Separate components logically while maintaining scale and alignment. Showcase materials, construction, and assembly details.
+\`\`\`
+
+### 10. 🏟️ Trade Show Display
+\`\`\`
+Create a realistic trade show booth featuring the attached product. Use professional exhibition design, clean branding, and modern presentation techniques. Make the product the centerpiece.
+\`\`\`
+
+### 11. 📦 Product Packaging Design
+\`\`\`
+Design premium packaging concepts for the attached product. Create realistic packaging materials, printing details, and retail presentation. Ensure the packaging complements the product category.
+\`\`\`
+
+### 12. 🛒 Product in Retail Shelf
+\`\`\`
+Place the attached product on a realistic retail shelf. Match industry-specific store layouts, lighting, and shelf organization. Ensure the product stands out naturally among surrounding items.
+\`\`\`
+
+### 13. 📘 Product Catalog Image
+\`\`\`
+Create a clean catalog-style image using the attached product. Use a neutral background, balanced lighting, and professional composition. Suitable for printed catalogs and digital brochures.
+\`\`\`
+
+### 14. 📰 Magazine Advertisement
+\`\`\`
+Create a high-end magazine advertisement featuring the attached product. Use editorial-quality photography, sophisticated composition, and premium visual storytelling. Do not add text.
+\`\`\`
+
+### 15. 🚀 Product Launch Teaser
+\`\`\`
+Create a dramatic product launch visual using the attached product. Use cinematic lighting, controlled shadows, and premium presentation. Build anticipation while maintaining realism.
+\`\`\`
+
+### 16. 📊 Corporate Presentation Slide
+\`\`\`
+Create a presentation-ready visual featuring the attached product. Use a clean business-oriented layout with professional lighting and clear product visibility. Suitable for investor and client presentations.
+\`\`\`
+
+### 17. 📋 Product Comparison Display
+\`\`\`
+Create a side-by-side comparison visual featuring the attached product and its variations. Maintain identical lighting, scale, and camera angle across all versions. Highlight differences clearly.
+\`\`\`
+
+### 18. 🎄 Seasonal Marketing Campaign
+\`\`\`
+Create a seasonal marketing visual featuring the attached product. Integrate subtle seasonal elements while maintaining focus on the product. Keep the design elegant and commercially appealing.
+\`\`\`
+
+### 19. 🔬 Product Feature Highlight
+\`\`\`
+Create a detailed close-up visual emphasizing the key features of the attached product. Showcase materials, craftsmanship, texture, and functional elements through professional macro photography styling.
+\`\`\`
+
+### 20. 🤖 AI-Enhanced Product Visualization
+\`\`\`
+Transform the attached product into a futuristic concept visualization. Preserve its core identity while presenting advanced materials, premium finishes, and next-generation design aesthetics. Maintain realism and professional quality.
+\`\`\`
+
+---
+
+**Categories Covered:** Background Editing · Product Photography · Ecommerce Assets · Mockups · Branding Visuals · Social Media Content · Lifestyle Marketing · Website Graphics · Packaging Design · Retail Merchandising · Catalog Design · Magazine Advertising · Product Launch · Corporate Presentations · Product Comparisons · Seasonal Campaigns · Feature Highlights · Trade Show Marketing · Concept Design`
   }
 ];
 
@@ -81,6 +199,7 @@ let completedIds   = new Set(JSON.parse(localStorage.getItem('pm_done') || '[]')
 const loginScreen   = document.getElementById('login-screen');
 const dashboard     = document.getElementById('dashboard');
 const pwInput       = document.getElementById('pw-input');
+const userInput     = document.getElementById('user-input');
 const loginError    = document.getElementById('login-error');
 const settingsModal = document.getElementById('settings-modal');
 const modelSelect   = document.getElementById('model-select');
@@ -119,14 +238,16 @@ document.getElementById('toggle-pw').onclick = () => {
   pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
 };
 document.getElementById('btn-login').onclick = login;
+document.getElementById('user-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
 pwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
 
 async function login() {
+  const username = document.getElementById('user-input').value.trim();
   const password = pwInput.value.trim();
-  if (!password) return;
+  if (!username || !password) return;
   loginError.classList.add('hidden');
   try {
-    const res  = await fetch('/api/verify-admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+    const res  = await fetch('/api/verify-admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
     const data = await res.json();
     if (data.success) { sessionStorage.setItem('pm_admin', 'true'); showDashboard(); }
     else { loginError.classList.remove('hidden'); pwInput.value = ''; pwInput.focus(); }
@@ -189,6 +310,15 @@ document.getElementById('open-settings-sb').onclick = () => settingsModal.classL
 document.getElementById('close-settings').onclick = () => settingsModal.classList.add('hidden');
 document.getElementById('save-settings').onclick  = saveSettings;
 settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
+
+/* ── Toggle Password Visibility ──────────────────────────── */
+['toggle-cp-old', 'toggle-cp-new', 'toggle-cp-confirm'].forEach(id => {
+  const btn = document.getElementById(id);
+  if (btn) btn.onclick = () => {
+    const input = document.getElementById(id.replace('toggle-', ''));
+    if (input) input.type = input.type === 'password' ? 'text' : 'password';
+  };
+});
 
 /* ── Change Password ────────────────────────────────────── */
 document.getElementById('btn-change-pw').onclick = changePassword;
@@ -342,6 +472,15 @@ async function generate() {
 
   const m = MODULES.find(x => x.id === activeModuleId);
   if (!m) return;
+
+  // Reference modules — display content directly, no API call
+  if (m.isReference && m.referenceContent) {
+    setGenerating(true); clearOutput(); showOutputArea(); fullOutput = m.referenceContent;
+    renderStreaming(fullOutput);
+    setTimeout(() => { renderFinal(fullOutput); markDone(m.id); setGenerating(false); }, 100);
+    return;
+  }
+
   const values = {}; let valid = true;
   m.inputs.forEach(inp => { const el = document.getElementById(`inp-${inp.id}`); values[inp.id] = el ? el.value.trim() : ''; if (!values[inp.id] && inp.type !== 'select') valid = false; });
   if (!valid) { alert('Please fill in all fields before generating.'); return; }

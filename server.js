@@ -3,6 +3,7 @@ const express = require('express');
 const OpenAI = require('openai');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,66 @@ function saveAdminPassword(newPw) {
   cfg.adminPassword = newPw;
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
 }
+
+const USERS_PATH = path.join(__dirname, 'data', 'users.json');
+
+function getUsers() {
+  try {
+    if (fs.existsSync(USERS_PATH)) return JSON.parse(fs.readFileSync(USERS_PATH, 'utf-8'));
+  } catch {}
+  return [];
+}
+
+function saveUsers(users) {
+  const dir = path.dirname(USERS_PATH);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(USERS_PATH, JSON.stringify(users, null, 2));
+}
+
+function hashPassword(pw) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex');
+  return salt + ':' + hash;
+}
+
+function verifyPassword(pw, stored) {
+  const [salt, hash] = stored.split(':');
+  const check = crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex');
+  return hash === check;
+}
+
+/* ── Register ────────────────────────────────────────────── */
+app.post('/api/register', (req, res) => {
+  const { firstName, email, password } = req.body;
+  if (!firstName || !email || !password) return res.status(400).json({ error: 'All fields required' });
+  if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  const users = getUsers();
+  if (users.find(u => u.email === email)) return res.status(409).json({ error: 'Email already registered' });
+  if (users.find(u => u.username === firstName)) return res.status(409).json({ error: 'Username already taken' });
+  const user = {
+    id: Date.now().toString(36),
+    username: firstName,
+    email,
+    passwordHash: hashPassword(password),
+    tier: 'free',
+    createdAt: new Date().toISOString()
+  };
+  users.push(user);
+  saveUsers(users);
+  res.json({ success: true, username: user.username, tier: user.tier });
+});
+
+/* ── Login ───────────────────────────────────────────────── */
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
+  const users = getUsers();
+  const user = users.find(u => u.username === username || u.email === username);
+  if (!user || !verifyPassword(password, user.passwordHash)) {
+    return res.status(401).json({ error: 'Invalid username or password' });
+  }
+  res.json({ success: true, username: user.username, tier: user.tier });
+});
 
 /* ── Config endpoint — tells frontend DeepSeek is ready ── */
 app.get('/api/config', (req, res) => {
@@ -84,9 +145,10 @@ app.post('/api/generate', async (req, res) => {
 
 /* ── Admin auth ─────────────────────────────────────────── */
 app.post('/api/verify-admin', (req, res) => {
-  const { password } = req.body;
-  if (password === getAdminPassword()) res.json({ success: true });
-  else res.status(401).json({ success: false, error: 'Invalid password' });
+  const { username, password } = req.body;
+  if (username !== 'admin') return res.status(401).json({ error: 'Invalid credentials' });
+  if (password === getAdminPassword()) res.json({ success: true, username: 'admin' });
+  else res.status(401).json({ success: false, error: 'Invalid credentials' });
 });
 
 /* ── Change password ────────────────────────────────────── */
@@ -121,7 +183,7 @@ if (require.main === module) {
     console.log(`PromptMaster running → http://localhost:${PORT}`);
     console.log(`                      http://127.0.0.1:${PORT}`);
     console.log(`Admin dashboard   → http://localhost:${PORT}/admin.html`);
-    console.log(`Admin password    → ${ADMIN_PASSWORD}`);
+    console.log(`Admin password    → ${getAdminPassword()}`);
     console.log(`DeepSeek API      → ${DEEPSEEK_API_KEY ? '✓ Configured (from .env)' : '⚠ Not configured — add DEEPSEEK_API_KEY to .env'}`);
   });
 }
