@@ -369,17 +369,8 @@ How I build operational software using AI-assisted development. I start from the
 - **Version control**: GitHub
 - **Terminal**: Windows Git Bash — when a command is needed, **offer to run it in Git Bash for me first** (I reply yes or no); if I decline or you can't execute, provide exact Git Bash commands, never PowerShell
 
-**Excelsior Brand System**
-
-| Element | Value |
-|---------|-------|
-| Primary Color | Navy `#0d1117` |
-| Accent Color | Gold `#b8975a` |
-| Heading Font | Cormorant Garamond |
-| Body Font | Jost |
-| Tone | Luxury, authoritative, precise |
-
 ---
+
 
 ### Currency Rules
 
