@@ -26,7 +26,7 @@
     </div>
     <p class="login-error hidden" id="login-error">Incorrect password. Try again.</p>
     <button class="btn-login" id="btn-login">Unlock Dashboard →</button>
-    <p class="login-hint">Default: <code>admin2025</code> &nbsp;|&nbsp; <a href="index.html" class="login-back">← Back to home</a></p>
+    <p class="login-hint"><a href="index.html" class="login-back">← Back to home</a></p>
   </div>
 </div>
 
@@ -45,6 +45,27 @@
         <option value="deepseek-chat">DeepSeek-V3 (chat) — Fast &amp; capable</option>
         <option value="deepseek-reasoner">DeepSeek-R1 (reasoner) — Advanced reasoning</option>
       </select>
+    </div>
+
+    <hr class="modal-divider">
+
+    <div class="modal-subsection">
+      <h3>🔑 Change Password</h3>
+      <div class="form-group">
+        <label for="cp-old">Current Password</label>
+        <input type="password" id="cp-old" placeholder="Enter current password" autocomplete="current-password"/>
+      </div>
+      <div class="form-group">
+        <label for="cp-new">New Password</label>
+        <input type="password" id="cp-new" placeholder="Enter new password (min. 6 characters)" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label for="cp-confirm">Confirm New Password</label>
+        <input type="password" id="cp-confirm" placeholder="Confirm new password" autocomplete="new-password"/>
+      </div>
+      <p class="cp-error hidden" id="cp-error"></p>
+      <p class="cp-success hidden" id="cp-success">✓ Password changed successfully</p>
+      <button class="btn-login" id="btn-change-pw" style="margin-top:0">Change Password</button>
     </div>
 
     <button class="btn-login" id="save-settings">Save Settings</button>

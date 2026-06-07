@@ -8,9 +8,29 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const ADMIN_PASSWORD   = process.env.ADMIN_PASSWORD  || 'admin2025';
+const CONFIG_PATH = path.join(__dirname, 'data', 'config.json');
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
 const DEFAULT_MODEL    = process.env.DEFAULT_MODEL    || 'deepseek-chat';
+
+// Load admin password from config file (persists across restarts)
+function getAdminPassword() {
+  try {
+    if (fs.existsSync(CONFIG_PATH)) {
+      const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
+      if (cfg.adminPassword) return cfg.adminPassword;
+    }
+  } catch {}
+  return process.env.ADMIN_PASSWORD || 'admin2025';
+}
+
+function saveAdminPassword(newPw) {
+  const dir = path.dirname(CONFIG_PATH);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  let cfg = {};
+  try { if (fs.existsSync(CONFIG_PATH)) cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8')); } catch {}
+  cfg.adminPassword = newPw;
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
+}
 
 /* ── Config endpoint — tells frontend DeepSeek is ready ── */
 app.get('/api/config', (req, res) => {
@@ -65,8 +85,21 @@ app.post('/api/generate', async (req, res) => {
 /* ── Admin auth ─────────────────────────────────────────── */
 app.post('/api/verify-admin', (req, res) => {
   const { password } = req.body;
-  if (password === ADMIN_PASSWORD) res.json({ success: true });
+  if (password === getAdminPassword()) res.json({ success: true });
   else res.status(401).json({ success: false, error: 'Invalid password' });
+});
+
+/* ── Change password ────────────────────────────────────── */
+app.post('/api/change-password', (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (currentPassword !== getAdminPassword()) {
+    return res.status(403).json({ error: 'Current password is incorrect' });
+  }
+  if (!newPassword || newPassword.length < 6) {
+    return res.status(400).json({ error: 'New password must be at least 6 characters' });
+  }
+  saveAdminPassword(newPassword);
+  res.json({ success: true });
 });
 
 /* ── Docs content ───────────────────────────────────────── */

@@ -190,6 +190,45 @@ document.getElementById('close-settings').onclick = () => settingsModal.classLis
 document.getElementById('save-settings').onclick  = saveSettings;
 settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
 
+/* ── Change Password ────────────────────────────────────── */
+document.getElementById('btn-change-pw').onclick = changePassword;
+
+async function changePassword() {
+  const currentPw = document.getElementById('cp-old').value.trim();
+  const newPw = document.getElementById('cp-new').value.trim();
+  const confirmPw = document.getElementById('cp-confirm').value.trim();
+  const errEl = document.getElementById('cp-error');
+  const successEl = document.getElementById('cp-success');
+
+  errEl.classList.add('hidden');
+  successEl.classList.add('hidden');
+
+  if (!currentPw) { errEl.textContent = 'Enter your current password.'; errEl.classList.remove('hidden'); return; }
+  if (newPw.length < 6) { errEl.textContent = 'New password must be at least 6 characters.'; errEl.classList.remove('hidden'); return; }
+  if (newPw !== confirmPw) { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
+
+  try {
+    const res = await fetch('/api/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentPassword: currentPw, newPassword: newPw })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      successEl.classList.remove('hidden');
+      document.getElementById('cp-old').value = '';
+      document.getElementById('cp-new').value = '';
+      document.getElementById('cp-confirm').value = '';
+    } else {
+      errEl.textContent = data.error || 'Failed to change password.';
+      errEl.classList.remove('hidden');
+    }
+  } catch {
+    errEl.textContent = 'Connection error.';
+    errEl.classList.remove('hidden');
+  }
+}
+
 /* ── Stats ───────────────────────────────────────────────── */
 function updateStats() { if (statDone) statDone.textContent = completedIds.size; }
 
