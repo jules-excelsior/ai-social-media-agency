@@ -1,7 +1,7 @@
 {
-  "name": "prompt-master",
+  "name": "social-media-growth-os",
   "version": "1.0.0",
-  "description": "AI Social Media Agency — PromptMaster",
+  "description": "Social Media Growth OS — AI-powered social media content platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

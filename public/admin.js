@@ -128,7 +128,7 @@ const MODULES = [
       };
       const selected = prompts[v['prompt-category']] || '';
       const cat = v['prompt-category'];
-      return `## ${cat}\n\n<span class="ip-actions"><button class="ip-btn ip-copy" onclick="window.copyPrompt(\`${cat}\`)">📋 Copy</button>&nbsp;<button class="ip-btn ip-save" onclick="window.savePrompt()">💾 Save</button></span>\n\n\n\`\`\`\n${selected}\n\`\`\`\n\n---\n*Paste this prompt into ChatGPT, Midjourney, DALL-E, or any AI image generator.*`;
+      return `> **Category:** ${cat}\n\n<span class="ip-actions"><button class="ip-btn ip-copy" onclick="window.copyPrompt()">📋 Copy Prompt</button>&nbsp;<button class="ip-btn ip-save" onclick="window.savePrompt()">💾 Save</button></span>\n\n<div class="ip-prompt-card">\n\n${selected}\n\n</div>\n\n---\n<small>Paste this prompt into **ChatGPT, Midjourney, DALL-E, or any AI image generator** to generate the image.</small>`;
     }
   }
 ];
@@ -622,14 +622,14 @@ drawerOverlay.onclick = closeDrawer;
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
 
 /* ── Global helpers for inline prompt buttons ──────────── */
-window.copyPrompt = function(category) {
-  const m = MODULES.find(x => x.id === 'image-prompts');
-  if (!m) return;
-  const prompts = m.prompt({ 'prompt-category': category });
-  const text = prompts.split('```')[1] || prompts;
-  navigator.clipboard.writeText(text.trim()).then(() => {
+window.copyPrompt = function() {
+  // Extract the prompt text from the currently displayed output
+  const card = document.querySelector('.ip-prompt-card');
+  if (!card) return;
+  const text = card.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
     const btn = document.querySelector('.ip-copy');
-    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000); }
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000); }
   });
 };
 window.savePrompt = function() {
