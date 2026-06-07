@@ -74,118 +74,61 @@ const MODULES = [
     name: '20 High-Converting ChatGPT Image Prompts for Brands',
     icon: '🖼️', color: '#3B82F6',
     gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
-    desc: '20 ready-to-use image generation prompts for product photography, branding, social media, and marketing visuals. Click a category to copy the prompt.',
+    desc: 'Select a category, click Generate, and get a ready-to-use image prompt for ChatGPT or any AI image generator.',
     isReference: true,
-    inputs: [],
+    inputs: [
+      { id: 'prompt-category', label: 'Choose Category', type: 'select',
+        opts: [
+          '1. 🎨 Background Removal',
+          '2. 📦 Product Mockup Placement',
+          '3. 💎 Luxury Brand Visual',
+          '4. 🎨 Product Color Variations',
+          '5. 📱 Social Media Creative',
+          '6. 🔄 Before and After Comparison',
+          '7. 🏠 Lifestyle Scene Integration',
+          '8. 🌐 Website Hero Banner',
+          '9. 🔍 Exploded Product View',
+          '10. 🏟️ Trade Show Display',
+          '11. 📦 Product Packaging Design',
+          '12. 🛒 Product in Retail Shelf',
+          '13. 📘 Product Catalog Image',
+          '14. 📰 Magazine Advertisement',
+          '15. 🚀 Product Launch Teaser',
+          '16. 📊 Corporate Presentation Slide',
+          '17. 📋 Product Comparison Display',
+          '18. 🎄 Seasonal Marketing Campaign',
+          '19. 🔬 Product Feature Highlight',
+          '20. 🤖 AI-Enhanced Product Visualization'
+        ]
+      }
+    ],
     system: '',
-    prompt: () => ``,
-    referenceContent: `## 🖼️ 20 High-Converting ChatGPT Image Prompts for Brands
-
----
-
-### 1. 🎨 Background Removal (Clean Commercial Cutout)
-\`\`\`
-Remove the background from the attached image. Preserve the original subject exactly as photographed, including edges, textures, shadows, and fine details. Create a clean transparent background with professional cutout accuracy. Avoid halos, blur, color contamination, or artificial smoothing. Maintain original resolution and proportions. Suitable for ecommerce, catalogs, and marketing materials.
-\`\`\`
-
-### 2. 📦 Product Mockup Placement
-\`\`\`
-Place the attached product into a realistic studio mockup environment. Use professional lighting, realistic shadows, and natural reflections. Match the original perspective and scale. Do not alter product color, shape, branding, or materials. The final image should resemble a professional product photoshoot.
-\`\`\`
-
-### 3. 💎 Luxury Brand Visual
-\`\`\`
-Create a premium branding image using the attached product. Use minimalist composition, elegant lighting, and refined visual balance. Highlight craftsmanship, texture, and material quality. Avoid text, logos, and promotional graphics. Suitable for luxury brand websites and presentations.
-\`\`\`
-
-### 4. 🎨 Product Color Variations
-\`\`\`
-Generate multiple realistic color and finish variations of the attached product. Keep geometry, perspective, lighting, and proportions identical. Change only colors and surface finishes. Ensure each variation appears naturally manufactured.
-\`\`\`
-
-### 5. 📱 Social Media Creative
-\`\`\`
-Create an organic social media image using the attached product. Use natural lighting and modern composition. Avoid sales-heavy visuals, badges, or promotional clutter. Focus on authenticity and visual appeal.
-\`\`\`
-
-### 6. 🔄 Before and After Comparison
-\`\`\`
-Create a realistic before-and-after comparison using the attached product. Use identical environments, lighting, and camera angles. Present a believable transformation without exaggeration.
-\`\`\`
-
-### 7. 🏠 Lifestyle Scene Integration
-\`\`\`
-Place the attached product into a realistic lifestyle environment where it would naturally be used. Match shadows, lighting, and perspective. Maintain authenticity and visual realism.
-\`\`\`
-
-### 8. 🌐 Website Hero Banner
-\`\`\`
-Create a homepage hero banner featuring the attached product. Use clean composition, premium lighting, and sufficient negative space for future marketing copy. Make the product the primary focal point.
-\`\`\`
-
-### 9. 🔍 Exploded Product View
-\`\`\`
-Create a professional exploded-view visualization of the attached product. Separate components logically while maintaining scale and alignment. Showcase materials, construction, and assembly details.
-\`\`\`
-
-### 10. 🏟️ Trade Show Display
-\`\`\`
-Create a realistic trade show booth featuring the attached product. Use professional exhibition design, clean branding, and modern presentation techniques. Make the product the centerpiece.
-\`\`\`
-
-### 11. 📦 Product Packaging Design
-\`\`\`
-Design premium packaging concepts for the attached product. Create realistic packaging materials, printing details, and retail presentation. Ensure the packaging complements the product category.
-\`\`\`
-
-### 12. 🛒 Product in Retail Shelf
-\`\`\`
-Place the attached product on a realistic retail shelf. Match industry-specific store layouts, lighting, and shelf organization. Ensure the product stands out naturally among surrounding items.
-\`\`\`
-
-### 13. 📘 Product Catalog Image
-\`\`\`
-Create a clean catalog-style image using the attached product. Use a neutral background, balanced lighting, and professional composition. Suitable for printed catalogs and digital brochures.
-\`\`\`
-
-### 14. 📰 Magazine Advertisement
-\`\`\`
-Create a high-end magazine advertisement featuring the attached product. Use editorial-quality photography, sophisticated composition, and premium visual storytelling. Do not add text.
-\`\`\`
-
-### 15. 🚀 Product Launch Teaser
-\`\`\`
-Create a dramatic product launch visual using the attached product. Use cinematic lighting, controlled shadows, and premium presentation. Build anticipation while maintaining realism.
-\`\`\`
-
-### 16. 📊 Corporate Presentation Slide
-\`\`\`
-Create a presentation-ready visual featuring the attached product. Use a clean business-oriented layout with professional lighting and clear product visibility. Suitable for investor and client presentations.
-\`\`\`
-
-### 17. 📋 Product Comparison Display
-\`\`\`
-Create a side-by-side comparison visual featuring the attached product and its variations. Maintain identical lighting, scale, and camera angle across all versions. Highlight differences clearly.
-\`\`\`
-
-### 18. 🎄 Seasonal Marketing Campaign
-\`\`\`
-Create a seasonal marketing visual featuring the attached product. Integrate subtle seasonal elements while maintaining focus on the product. Keep the design elegant and commercially appealing.
-\`\`\`
-
-### 19. 🔬 Product Feature Highlight
-\`\`\`
-Create a detailed close-up visual emphasizing the key features of the attached product. Showcase materials, craftsmanship, texture, and functional elements through professional macro photography styling.
-\`\`\`
-
-### 20. 🤖 AI-Enhanced Product Visualization
-\`\`\`
-Transform the attached product into a futuristic concept visualization. Preserve its core identity while presenting advanced materials, premium finishes, and next-generation design aesthetics. Maintain realism and professional quality.
-\`\`\`
-
----
-
-**Categories Covered:** Background Editing · Product Photography · Ecommerce Assets · Mockups · Branding Visuals · Social Media Content · Lifestyle Marketing · Website Graphics · Packaging Design · Retail Merchandising · Catalog Design · Magazine Advertising · Product Launch · Corporate Presentations · Product Comparisons · Seasonal Campaigns · Feature Highlights · Trade Show Marketing · Concept Design`
+    prompt: (v) => {
+      const prompts = {
+        '1. 🎨 Background Removal': 'Remove the background from the attached image. Preserve the original subject exactly as photographed, including edges, textures, shadows, and fine details. Create a clean transparent background with professional cutout accuracy. Avoid halos, blur, color contamination, or artificial smoothing. Maintain original resolution and proportions. Suitable for ecommerce, catalogs, and marketing materials.',
+        '2. 📦 Product Mockup Placement': 'Place the attached product into a realistic studio mockup environment. Use professional lighting, realistic shadows, and natural reflections. Match the original perspective and scale. Do not alter product color, shape, branding, or materials. The final image should resemble a professional product photoshoot.',
+        '3. 💎 Luxury Brand Visual': 'Create a premium branding image using the attached product. Use minimalist composition, elegant lighting, and refined visual balance. Highlight craftsmanship, texture, and material quality. Avoid text, logos, and promotional graphics. Suitable for luxury brand websites and presentations.',
+        '4. 🎨 Product Color Variations': 'Generate multiple realistic color and finish variations of the attached product. Keep geometry, perspective, lighting, and proportions identical. Change only colors and surface finishes. Ensure each variation appears naturally manufactured.',
+        '5. 📱 Social Media Creative': 'Create an organic social media image using the attached product. Use natural lighting and modern composition. Avoid sales-heavy visuals, badges, or promotional clutter. Focus on authenticity and visual appeal.',
+        '6. 🔄 Before and After Comparison': 'Create a realistic before-and-after comparison using the attached product. Use identical environments, lighting, and camera angles. Present a believable transformation without exaggeration.',
+        '7. 🏠 Lifestyle Scene Integration': 'Place the attached product into a realistic lifestyle environment where it would naturally be used. Match shadows, lighting, and perspective. Maintain authenticity and visual realism.',
+        '8. 🌐 Website Hero Banner': 'Create a homepage hero banner featuring the attached product. Use clean composition, premium lighting, and sufficient negative space for future marketing copy. Make the product the primary focal point.',
+        '9. 🔍 Exploded Product View': 'Create a professional exploded-view visualization of the attached product. Separate components logically while maintaining scale and alignment. Showcase materials, construction, and assembly details.',
+        '10. 🏟️ Trade Show Display': 'Create a realistic trade show booth featuring the attached product. Use professional exhibition design, clean branding, and modern presentation techniques. Make the product the centerpiece.',
+        '11. 📦 Product Packaging Design': 'Design premium packaging concepts for the attached product. Create realistic packaging materials, printing details, and retail presentation. Ensure the packaging complements the product category.',
+        '12. 🛒 Product in Retail Shelf': 'Place the attached product on a realistic retail shelf. Match industry-specific store layouts, lighting, and shelf organization. Ensure the product stands out naturally among surrounding items.',
+        '13. 📘 Product Catalog Image': 'Create a clean catalog-style image using the attached product. Use a neutral background, balanced lighting, and professional composition. Suitable for printed catalogs and digital brochures.',
+        '14. 📰 Magazine Advertisement': 'Create a high-end magazine advertisement featuring the attached product. Use editorial-quality photography, sophisticated composition, and premium visual storytelling. Do not add text.',
+        '15. 🚀 Product Launch Teaser': 'Create a dramatic product launch visual using the attached product. Use cinematic lighting, controlled shadows, and premium presentation. Build anticipation while maintaining realism.',
+        '16. 📊 Corporate Presentation Slide': 'Create a presentation-ready visual featuring the attached product. Use a clean business-oriented layout with professional lighting and clear product visibility. Suitable for investor and client presentations.',
+        '17. 📋 Product Comparison Display': 'Create a side-by-side comparison visual featuring the attached product and its variations. Maintain identical lighting, scale, and camera angle across all versions. Highlight differences clearly.',
+        '18. 🎄 Seasonal Marketing Campaign': 'Create a seasonal marketing visual featuring the attached product. Integrate subtle seasonal elements while maintaining focus on the product. Keep the design elegant and commercially appealing.',
+        '19. 🔬 Product Feature Highlight': 'Create a detailed close-up visual emphasizing the key features of the attached product. Showcase materials, craftsmanship, texture, and functional elements through professional macro photography styling.',
+        '20. 🤖 AI-Enhanced Product Visualization': 'Transform the attached product into a futuristic concept visualization. Preserve its core identity while presenting advanced materials, premium finishes, and next-generation design aesthetics. Maintain realism and professional quality.'
+      };
+      const selected = prompts[v['prompt-category']] || '';
+      return `## ${v['prompt-category']}\n\n\`\`\`\n${selected}\n\`\`\`\n\n**Copy this prompt and paste it into ChatGPT, Midjourney, DALL-E, or any AI image generator.**`;
+    }
   }
 ];
 
@@ -473,9 +416,12 @@ async function generate() {
   const m = MODULES.find(x => x.id === activeModuleId);
   if (!m) return;
 
-  // Reference modules — display content directly, no API call
-  if (m.isReference && m.referenceContent) {
-    setGenerating(true); clearOutput(); showOutputArea(); fullOutput = m.referenceContent;
+  // Reference modules — use prompt function directly, no API call
+  if (m.isReference) {
+    const values = {};
+    m.inputs.forEach(inp => { const el = document.getElementById(`inp-${inp.id}`); values[inp.id] = el ? el.value.trim() : ''; });
+    setGenerating(true); clearOutput(); showOutputArea();
+    fullOutput = m.prompt(values);
     renderStreaming(fullOutput);
     setTimeout(() => { renderFinal(fullOutput); markDone(m.id); setGenerating(false); }, 100);
     return;
