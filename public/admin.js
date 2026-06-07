@@ -127,7 +127,8 @@ const MODULES = [
         '20. 🤖 AI-Enhanced Product Visualization': 'Transform the attached product into a futuristic concept visualization. Preserve its core identity while presenting advanced materials, premium finishes, and next-generation design aesthetics. Maintain realism and professional quality.'
       };
       const selected = prompts[v['prompt-category']] || '';
-      return `## ${v['prompt-category']}\n\n\`\`\`\n${selected}\n\`\`\`\n\n**Copy this prompt and paste it into ChatGPT, Midjourney, DALL-E, or any AI image generator.**`;
+      const cat = v['prompt-category'];
+      return `## ${cat}\n\n<span class="ip-actions"><button class="ip-btn ip-copy" onclick="window.copyPrompt(\`${cat}\`)">📋 Copy</button>&nbsp;<button class="ip-btn ip-save" onclick="window.savePrompt()">💾 Save</button></span>\n\n\n\`\`\`\n${selected}\n\`\`\`\n\n---\n*Paste this prompt into ChatGPT, Midjourney, DALL-E, or any AI image generator.*`;
     }
   }
 ];
@@ -457,7 +458,13 @@ function renderStreaming(text) {
 function renderFinal(text) {
   outputContent.style.whiteSpace = '';
   outputContent.innerHTML = window.marked ? marked.parse(text) : escapeHtml(text).replace(/\n/g,'<br>');
-  btnCopy.classList.remove('hidden'); btnSave.classList.remove('hidden'); btnClear.classList.remove('hidden');
+  // Hide bottom save/copy for reference modules (they have inline buttons)
+  if (activeModuleId === 'image-prompts') {
+    btnCopy.classList.add('hidden'); btnSave.classList.add('hidden');
+  } else {
+    btnCopy.classList.remove('hidden'); btnSave.classList.remove('hidden');
+  }
+  btnClear.classList.remove('hidden');
 }
 function renderError(msg) {
   outputContent.classList.remove('hidden'); outputPlaceholder.classList.add('hidden');
@@ -613,6 +620,21 @@ function closeDrawer() {
 document.getElementById('close-drawer').onclick = closeDrawer;
 drawerOverlay.onclick = closeDrawer;
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+/* ── Global helpers for inline prompt buttons ──────────── */
+window.copyPrompt = function(category) {
+  const m = MODULES.find(x => x.id === 'image-prompts');
+  if (!m) return;
+  const prompts = m.prompt({ 'prompt-category': category });
+  const text = prompts.split('```')[1] || prompts;
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    const btn = document.querySelector('.ip-copy');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000); }
+  });
+};
+window.savePrompt = function() {
+  btnSave.click();
+};
 
 /* ── Util ────────────────────────────────────────────────── */
 function escapeHtml(str) {
