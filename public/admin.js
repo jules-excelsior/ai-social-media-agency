@@ -70,8 +70,91 @@ const MODULES = [
     prompt: (v) => `Repurpose this into 6 platform-specific formats:\n\n**Original Idea:**\n${v.content}\n\n## 1. Short-Form Video Script (TikTok/Reels/Shorts)\n## 2. Carousel Post (Instagram/LinkedIn)\n## 3. Long-Form Caption (Instagram/Facebook)\n## 4. Twitter/X Thread\n## 5. LinkedIn Post\n## 6. Engagement Bait Post\n\nEach format: platform-native and copy-ready.`
   },
   {
+    id: 'content-calendar',
+    name: 'Content Calendar Generator',
+    icon: '📅', color: '#3B82F6',
+    gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
+    desc: 'Generate a complete 30-day content calendar with daily post ideas, hooks, angles, formats, and CTAs organized by week.',
+    inputs: [
+      { id: 'niche',    label: 'Your Niche',  type: 'text',   ph: 'e.g., fitness, SaaS, personal finance' },
+      { id: 'platform', label: 'Platform',     type: 'select', opts: ['Instagram','TikTok','YouTube','LinkedIn','Twitter/X','Facebook','Pinterest','Threads'] },
+      { id: 'goal',     label: 'Campaign Goal', type: 'text',   ph: 'e.g., increase engagement, drive traffic, build authority' }
+    ],
+    system: 'You are a social media content strategist. Generate structured 30-day content calendars in markdown.',
+    prompt: (v) => `Create a 30-day content calendar for ${v.niche} on ${v.platform}. Goal: ${v.goal}.\n\n## Week 1: [Theme]\n- Day 1: [Hook] → [Format] → [CTA]\n- Day 2...\n## Week 2: [Theme]\n...\n## Week 3: [Theme]\n...\n## Week 4: [Theme]\n...\n\nEach day: content hook, post format (carousel/video/caption), CTA, and hashtag suggestions.`
+  },
+  {
+    id: 'hashtag-seo',
+    name: 'Hashtag & SEO Strategy',
+    icon: '🏷️', color: '#60A5FA',
+    gradient: 'linear-gradient(135deg,#60A5FA,#93C5FD)',
+    desc: 'Complete hashtag research with tiered sets, rotation schedule, SEO keywords, and platform-specific discoverability tactics.',
+    inputs: [
+      { id: 'niche',    label: 'Your Niche',  type: 'text',   ph: 'e.g., vegan recipes, tech reviews' },
+      { id: 'platform', label: 'Platform',     type: 'select', opts: ['Instagram','TikTok','YouTube','LinkedIn','Twitter/X','Facebook','Pinterest','Threads'] }
+    ],
+    system: 'You are a hashtag and SEO strategist. Provide actionable, tiered hashtag strategies in markdown.',
+    prompt: (v) => `Create a hashtag and SEO strategy for ${v.niche} on ${v.platform}.\n\n## Tier 1: High-Volume Hashtags (30+)\n## Tier 2: Niche-Specific Hashtags (20+)\n## Tier 3: Brand-Building Hashtags (15+)\n## 4-Week Rotation Schedule\n## Caption SEO Keywords\n## Platform-Specific Discoverability Tips`
+  },
+  {
+    id: 'bio-optimizer',
+    name: 'Bio & Profile Optimizer',
+    icon: '🪪', color: '#2563EB',
+    gradient: 'linear-gradient(135deg,#2563EB,#3B82F6)',
+    desc: 'Generate 5 bio variations, keyword optimization, link-in-bio strategy, and a profile conversion checklist.',
+    inputs: [
+      { id: 'niche',    label: 'Your Niche',  type: 'text',   ph: 'e.g., business coach, e-commerce brand' },
+      { id: 'platform', label: 'Platform',     type: 'select', opts: ['Instagram','TikTok','YouTube','LinkedIn','Twitter/X','Facebook','Pinterest','Threads'] }
+    ],
+    system: 'You are a profile optimization expert. Write high-conversion bios in markdown.',
+    prompt: (v) => `Create optimized bio and profile for ${v.niche} on ${v.platform}.\n\n## Bio Variation 1: Professional\n## Bio Variation 2: Friendly\n## Bio Variation 3: Story-Driven\n## Bio Variation 4: Results-Focused\n## Bio Variation 5: Short & Punchy\n\n## Keyword Optimization\n## Link-in-Bio Strategy\n## 10-Point Profile Conversion Checklist`
+  },
+  {
+    id: 'competitor-analysis',
+    name: 'Competitor Analysis Module',
+    icon: '🔍', color: '#60A5FA',
+    gradient: 'linear-gradient(135deg,#60A5FA,#2563EB)',
+    desc: 'Deep competitive intelligence — analyze competitors, find content gaps, extract differentiation strategies, and build your moat.',
+    inputs: [
+      { id: 'niche',      label: 'Your Niche',    type: 'text',   ph: 'e.g., online fitness coaching' },
+      { id: 'competitor', label: 'Competitors',    type: 'text',   ph: 'e.g., @brand1, @brand2, @brand3' }
+    ],
+    system: 'You are a competitive intelligence analyst. Provide actionable competitor breakdowns in markdown.',
+    prompt: (v) => `Perform competitive analysis for ${v.niche}.\n\n**Competitors Analyzed:** ${v.competitor}\n\n## Competitor Content Strategy Overview\n## Content Gap Analysis\n## Engagement Comparison\n## Differentiation Opportunities\n## What They Do Well\n## Where They Fall Short\n## Recommended Strategy to Stand Out`
+  },
+  {
+    id: 'caption-rewriter',
+    name: 'Caption Rewriter',
+    icon: '✍️', color: '#2563EB',
+    gradient: 'linear-gradient(135deg,#2563EB,#93C5FD)',
+    desc: 'Instantly rewrite any caption in 5 tones — professional, casual, funny, inspirational, and bold.',
+    inputs: [
+      { id: 'topic',  label: 'Topic or Message', type: 'textarea', ph: 'Paste your message or topic to rewrite…' },
+      { id: 'tone',   label: 'Tone',              type: 'select',  opts: ['Professional','Casual','Funny','Inspirational','Bold'] }
+    ],
+    system: 'You are a professional copywriter. Rewrite captions in different tones with high engagement.',
+    prompt: (v) => `Rewrite this message in a ${v.tone} tone:\n\n**Original:**\n${v.topic}\n\n## ${v.tone} Version\n- Opening hook\n- Body (3-4 lines)\n- CTA\n- 5 relevant hashtags\n\nMake it engaging, platform-native, and ready to post.`
+  },
+  {
+    id: 'dm-scripts',
+    name: 'DM / Outreach Script Generator',
+    icon: '💬', color: '#3B82F6',
+    gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
+    desc: 'High-converting DM scripts for collabs, sales, networking, and partnerships with cold, warm, and bold variants.',
+    inputs: [
+      { id: 'goal',    label: 'Outreach Goal', type: 'select', opts: ['Collaboration','Sales','Networking','Partnership','Sponsorship'] },
+      { id: 'audience', label: 'Target Person', type: 'text',   ph: 'e.g., fitness influencer, SaaS founder, local business' }
+    ],
+    system: 'You are an outreach and conversion specialist. Write high-converting DM scripts in markdown.',
+    prompt: (v) => `Create DM outreach scripts for ${v.goal} targeting ${v.audience}.\n\n## Cold Outreach Script\n- Opening, value prop, CTA\n\n## Warm Outreach Script\n- Mutual connection mention, specific compliment, CTA\n\n## Bold Outreach Script\n- Direct ask, social proof, urgency\n\n## Follow-Up Sequence\n- Day 3 follow-up\n- Day 7 follow-up\n\nEach script: ready to copy, paste, and send.`
+  },
+  {
     id: 'image-prompts',
     name: '20 High-Converting ChatGPT Image Prompts for Brands',
+    icon: '🖼️', color: '#3B82F6',
+    gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
+    desc: 'Select a category, click Generate, and get a ready-to-use image prompt for ChatGPT or any AI image generator.',
+    isReference: true,
     icon: '🖼️', color: '#3B82F6',
     gradient: 'linear-gradient(135deg,#3B82F6,#60A5FA)',
     desc: 'Select a category, click Generate, and get a ready-to-use image prompt for ChatGPT or any AI image generator.',
@@ -304,13 +387,18 @@ async function changePassword() {
 }
 
 /* ── Stats ───────────────────────────────────────────────── */
-function updateStats() { if (statDone) statDone.textContent = completedIds.size; }
+function updateStats() {
+  if (statDone) {
+    const total = MODULES.filter(m => !m.isReference).length;
+    statDone.textContent = completedIds.size + '/' + total;
+  }
+}
 
 /* ── Module Grid ─────────────────────────────────────────── */
 function buildModuleGrid() {
   if (!moduleGrid) return;
   moduleGrid.innerHTML = '';
-  MODULES.forEach(m => {
+  MODULES.filter(m => !m.isReference).forEach(m => {
     const card = document.createElement('div');
     card.className = 'module-card';
     card.style.setProperty('--module-color', m.color);
@@ -331,6 +419,29 @@ function buildModuleGrid() {
 
 /* ── Nav Handlers ────────────────────────────────────────── */
 function buildNavHandlers() {
+  // Generate sidebar nav dynamically from MODULES
+  const container = document.getElementById('nav-agents');
+  if (container) {
+    const agents = MODULES.filter(m => !m.isReference);
+    const refs = MODULES.filter(m => m.isReference);
+    let html = `<div class="nav-section">AI AGENTS</div>`;
+    agents.forEach(m => {
+      const done = completedIds.has(m.id) ? ' done' : '';
+      html += `<button class="nav-item${done}" data-view="module" data-id="${m.id}">
+        <span class="nav-icon">${m.icon}</span><span class="nav-label">${m.name}</span><span class="nav-check">✓</span>
+      </button>`;
+    });
+    if (refs.length) {
+      html += `<div class="nav-section">REFERENCE</div>`;
+      refs.forEach(m => {
+        html += `<button class="nav-item" data-view="module" data-id="${m.id}">
+          <span class="nav-icon">${m.icon}</span><span class="nav-label">${m.name}</span><span class="nav-check">✓</span>
+        </button>`;
+      });
+    }
+    container.innerHTML = html;
+  }
+
   document.querySelectorAll('.nav-item').forEach(btn => {
     const view = btn.dataset.view;
     btn.onclick = () => {
