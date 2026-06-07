@@ -209,6 +209,173 @@ Diagnose the likely causes and provide a 14-day recovery plan.
 
 ---
 
+## Global Reference (CLAUDE.md)
+
+> This section is the full CLAUDE.md content — security standards, development methodology, workflow preferences, and business context. Use as reference when coding.
+
+---
+
+## My Workflow Preferences
+
+> Added June 2026. Applies across all projects and environments.
+
+- **Never stop mid-task without asking.** If something needs a fix, ask whether to proceed with the fix rather than stopping silently.
+- **Always ask before any commit or push.** Never commit or push without my explicit go-ahead — this prevents conflicts.
+- **Offer to run commands instead of assuming.** When Git Bash / a terminal is available, ask *"Would you like me to run this in Git Bash for you?"* before running anything that changes state — don't silently run it, and don't make me run it manually if you're able to do it yourself.
+- **Quick read-only checks** (`git status`, `git diff`, `git log`) you may run directly to investigate.
+- **If I decline, or you can't execute**, hand me the exact Git Bash commands to run myself.
+
+---
+
+## Development Standards
+
+### Development Methodology
+
+> *"You don't need to know everything to build something real. You need clarity, structure, and the discipline to keep iterating."*
+
+**Workflow:** Git Bash → Claude → Localhost Test → Supabase/Neon → Vercel Deploy
+
+| # | Principle | Rule |
+|---|-----------|------|
+| 01 | **Propose Before You Build** | No code until the plan is clear. Always define scope, architecture, and sequence first. |
+| 02 | **Feature Branches, Always** | Every new feature lives on its own Git branch. Nothing touches master until it's tested and stable. |
+| 03 | **Real Database From Day One** | Supabase or Neon from the start — not JSON, not local workarounds. |
+| 04 | **Localhost First, Deploy Last** | Test at localhost first — iterate until stable. Then push via Git Bash → Vercel auto-deploys. Only skip localhost if explicitly requested. |
+| 05 | **One AI, Fully Mastered** | Standardized on Claude across architecture, code, copy, and strategy. |
+| 06 | **Document As You Go** | SOPs, changelogs, and briefs are built alongside the product — not written after the fact. |
+| 07 | **Iteration Is The Real Skill** | Clear communication and precise problem framing produce better software than memorized syntax. |
+| 08 | **Security by Default** | Every deployment passes basic security validation before release. |
+| 09 | **Structured Project Memory** | Every project carries a CLAUDE.md — stack details, branch rules, session context. |
+| 10 | **Conventional Commits** | Every commit: `feat`, `fix`, `docs`, `security`, `refactor`. Feeds the changelog automatically. |
+
+### Default Tech Stack
+
+- **Framework**: Next.js 14/15 App Router • **Language**: TypeScript (strict mode)
+- **Database**: Supabase (primary), Neon (secondary)
+- **Deployment**: Vercel (primary), Render (secondary, Singapore region)
+- **AI**: Anthropic Claude API (`claude-sonnet-4-6`)
+- **Email**: Resend • **Auth**: Supabase Auth • **Styling**: Tailwind CSS
+- **Automation**: Zapier • **Cron**: cron.org
+- **Package manager**: npm • **Version control**: GitHub
+- **Terminal**: Windows Git Bash
+
+### Currency Rules
+
+- **Local projects** (Philippine clients) → ₱ Philippine Peso
+- **Global projects** (international audience) → $ USD
+- **Dual-currency** → show both, lead with ₱
+
+### How I Work with Claude
+
+- Offer to run terminal commands in Git Bash first
+- Show full code blocks — never truncate or summarize
+- Tell me the file and line — always specify where changes go
+- Flag breaking changes before they happen
+- Plain-language input style — I describe what I want, you translate to code
+- Prefer single-file solutions unless architecture demands otherwise
+- Localhost first, deploy last
+- Security flag always — before marking anything done, flag exposed env variables, missing RLS rules, unprotected routes
+- No filler — skip "Great question!", "Certainly!" — just answer
+- Lead with the solution — don't explain what you're about to do, just do it
+- One question max — ask only the most important clarification
+
+### Content & Writing Style
+
+- **Tone:** Professional, precise, no fluff
+- **Format:** Tables and code blocks liberally; bullet lists sparingly
+- **Documents:** Formal Philippines business English
+- **Technical writing:** Clear, sequential, numbered steps
+- **Marketing copy:** Benefit-led, authoritative — not hype
+
+**Forbidden words:** `delve`, `leverage`, `synergy`, `empower`, `utilize`, `seamlessly`, `cutting-edge`, `game-changer`, `robust`, `holistic`, `ecosystem`, `streamline`, `transformative`, `unlock`, `elevate`, `groundbreaking`, `tailored solutions`, `in today's fast-paced world`, `it's important to note`, `absolutely`, `certainly`, `of course`, `I'd be happy to`
+
+**No em-dashes as sentence connectors** — use plain sentence structure.
+
+---
+
+## Security Standards
+
+### Four Security Tools
+
+| Tool | Surface | Auto-activates when |
+|---|---|---|
+| `/security-review` | Code — OWASP Top 10, secrets, SQL, XSS, CSRF, auth, rate limiting | Writing code that touches auth, user input, API, payments, sensitive data |
+| `/security-scan` (AgentShield) | Claude Code — hooks, MCPs, agent configs, permissions | `.claude/settings.json` changes, new MCP or hook added |
+| `cloud-infrastructure-security` | Infrastructure — IAM, network, CI/CD, CDN/WAF, backups | Deploying to cloud, configuring infra, setting up CI/CD |
+| **`security report`** | Everything — all four merged into one scored report | When user says "security report" |
+
+### Non-Negotiable Security Rules
+
+1. **Secrets — Always Server-Side** — NEVER put API keys in frontend code
+2. **Database — No SQLite on Serverless** — Vercel, Netlify, Railway, Fly.io → reject SQLite
+3. **Authorization — Ownership Checks Are Mandatory** — always verify `record.userId === authenticatedUser.id`
+4. **Input Validation — Server-Side Always** — every endpoint validates with Zod or equivalent
+5. **SQL — Parameterized Queries Only** — never string interpolation with user input
+6. **Passwords — bcrypt or argon2 Only** — cost 12 minimum
+7. **Error Handling — Never a White Screen** — every component needs loading, error, empty states
+8. **CORS — Explicit Origins Only** — never `origin: '*'` on authenticated routes
+9. **Rate Limiting — Required on Key Endpoints** — auth: max 5 req/min/IP
+10. **Secure Headers** — Express: `helmet` middleware. Next.js: headers in config
+11. **Session Store — Never MemoryStore in Production**
+12. **VPS Hardening** — `apt install fail2ban -y && systemctl enable fail2ban`
+
+### Security Pre-Commit Checklist
+
+- [ ] No hardcoded API keys, tokens, passwords, or SSH keys
+- [ ] `.env.local` in `.gitignore` and not staged
+- [ ] No `NEXT_PUBLIC_` used for secrets
+- [ ] All AI output escaped before rendering in UI
+- [ ] No `eval()`, `exec()`, or `spawn()` with user input
+- [ ] `npm audit --audit-level=high` passing
+- [ ] All external API calls have a timeout (10s max)
+
+### Security Pre-Deploy Checklist
+
+- [ ] All secrets in Vercel environment variables
+- [ ] Supabase RLS active on all tables
+- [ ] Admin endpoints protected by authentication middleware
+- [ ] HTTPS enforced — no mixed content
+- [ ] Privacy Policy linked on all pages that collect PII
+
+---
+
+## Operations & Workflow
+
+### Vercel Deployment Rules
+
+- `export const runtime = "nodejs"` for API routes using Node APIs
+- `maxDuration = 60` for routes calling external APIs
+- Confirm production branch before pushing
+- Add env vars to Vercel dashboard, not just `.env.local`
+
+### Supabase Rules
+
+- Use `supabaseAdmin` (service role) for ALL server-side writes
+- Never expose service role key to the client
+- Always enable RLS on new tables
+- Test RLS after every schema change
+- Use `upsert` over `insert` when row may already exist
+
+### Claude API Rules
+
+- Default model: `claude-sonnet-4-6`
+- Use prompt caching for long system prompts
+- For streaming: use `anthropic.messages.stream()` not `.create()`
+- Always set `max_tokens` explicitly
+- 429 errors → exponential backoff, not immediate retry
+
+### AI App Development Rules
+
+- System prompts are sacred — never change without asking
+- Use prompt caching for system prompts >1000 tokens
+- Never expose API keys client-side
+- Log token usage for cost tracking
+- Fallback behavior — if AI API is down, graceful error, never white screen
+- Conversation history cap — limit to MAX_MESSAGES_IN_HISTORY (e.g. 20)
+- Rate limit AI endpoints — API calls cost money
+
+---
+
 ## Getting Started with DeepSeek
 
 1. Sign up at [platform.deepseek.com](https://platform.deepseek.com)
