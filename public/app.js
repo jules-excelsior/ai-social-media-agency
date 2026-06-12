@@ -225,7 +225,6 @@ const btnCopy         = document.getElementById('btn-copy');
 const outputPlaceholder = document.getElementById('output-placeholder');
 const outputContent   = document.getElementById('output-content');
 const settingsModal   = document.getElementById('settings-modal');
-const apiKeyInput     = document.getElementById('api-key-input');
 const modelSelect     = document.getElementById('model-select');
 const savedMsg        = document.getElementById('saved-msg');
 
@@ -239,9 +238,6 @@ function init() {
   document.getElementById('close-settings').onclick = () => settingsModal.classList.add('hidden');
   settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
 
-  document.getElementById('toggle-key').onclick = () => {
-    apiKeyInput.type = apiKeyInput.type === 'password' ? 'text' : 'password';
-  };
   document.getElementById('save-settings').onclick = saveSettings;
   btnGenerate.onclick = generate;
   btnClear.onclick    = clearOutput;
@@ -337,12 +333,6 @@ function buildInputs(m) {
 async function generate() {
   if (isGenerating) return;
 
-  const apiKey = localStorage.getItem('pm_api_key');
-  if (!apiKey) {
-    settingsModal.classList.remove('hidden');
-    return;
-  }
-
   const m = activeModule;
   const values = {};
   let valid = true;
@@ -364,15 +354,15 @@ async function generate() {
 
   const userPrompt   = m.prompt(values);
   const systemPrompt = m.system;
-  const model        = localStorage.getItem('pm_model') || 'claude-opus-4-8';
+  const model        = localStorage.getItem('pm_model') || 'deepseek-chat';
 
   fullOutput = '';
 
   try {
     const resp = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ systemPrompt, userPrompt, apiKey, model })
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrfToken() },
+      body: JSON.stringify({ systemPrompt, userPrompt, model })
     });
 
     if (!resp.ok) {
@@ -412,7 +402,8 @@ function renderStreaming(text) {
 function renderFinal(text) {
   outputContent.style.whiteSpace = '';
   if (window.marked) {
-    outputContent.innerHTML = marked.parse(text);
+    const html = marked.parse(text);
+    outputContent.innerHTML = window.DOMPurify ? DOMPurify.sanitize(html) : html;
   } else {
     outputContent.innerHTML = escapeHtml(text).replace(/\n/g, '<br>');
   }
@@ -424,7 +415,7 @@ function renderError(msg) {
   outputContent.classList.remove('hidden');
   outputPlaceholder.classList.add('hidden');
   outputContent.style.whiteSpace = 'pre-wrap';
-  outputContent.innerHTML = `<span style="color:#ef4444">⚠ Error: ${escapeHtml(msg)}\n\nPlease check your API key in Settings and try again.</span>`;
+  outputContent.innerHTML = `<span style="color:#ef4444">⚠ Error: ${escapeHtml(msg)}</span>`;
 }
 
 function showOutput() {
@@ -469,22 +460,23 @@ function markDone(id) {
 
 /* ── Settings ────────────────────────────────────────────── */
 function loadSettings() {
-  const key   = localStorage.getItem('pm_api_key') || '';
-  const model = localStorage.getItem('pm_model')   || 'claude-opus-4-8';
-  apiKeyInput.value = key;
+  const model = localStorage.getItem('pm_model') || 'deepseek-chat';
   modelSelect.value = model;
 }
 
 function saveSettings() {
-  const key   = apiKeyInput.value.trim();
   const model = modelSelect.value;
-  if (key) localStorage.setItem('pm_api_key', key);
   localStorage.setItem('pm_model', model);
   savedMsg.classList.remove('hidden');
   setTimeout(() => savedMsg.classList.add('hidden'), 2000);
 }
 
 /* ── Util ────────────────────────────────────────────────── */
+function getCsrfToken() {
+  const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+  return match ? match[1] : '';
+}
+
 function escapeHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }

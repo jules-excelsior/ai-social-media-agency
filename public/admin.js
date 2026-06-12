@@ -258,11 +258,15 @@ const docsBody      = document.getElementById('docs-body');
 
 /* ── Auth ────────────────────────────────────────────────── */
 (function checkAuth() {
-  if (sessionStorage.getItem('pm_admin') === 'true') showDashboard();
+  fetch('/api/me').then(r => r.ok ? showDashboard() : null).catch(() => {});
 })();
 
 document.getElementById('toggle-pw').onclick = () => {
-  pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+  const isVisible = pwInput.type === 'text';
+  pwInput.type = isVisible ? 'password' : 'text';
+  const btn = document.getElementById('toggle-pw');
+  btn.textContent = isVisible ? '👁' : '🙈';
+  btn.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
 };
 document.getElementById('btn-login').onclick = login;
 document.getElementById('user-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
@@ -274,14 +278,24 @@ async function login() {
   if (!username || !password) return;
   loginError.classList.add('hidden');
   try {
-    const res  = await fetch('/api/verify-admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+    const res  = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrfToken() }, body: JSON.stringify({ username, password }) });
     const data = await res.json();
-    if (data.success) { sessionStorage.setItem('pm_admin', 'true'); showDashboard(); }
-    else { loginError.classList.remove('hidden'); pwInput.value = ''; pwInput.focus(); }
+    if (data.success) {
+      sessionStorage.setItem('pm_user', data.username);
+      showDashboard();
+    } else {
+      loginError.textContent = data.error || 'Invalid credentials';
+      loginError.classList.remove('hidden');
+      pwInput.value = ''; pwInput.focus();
+    }
   } catch { loginError.textContent = 'Connection error — is the server running?'; loginError.classList.remove('hidden'); }
 }
 
-document.getElementById('btn-logout').onclick = () => { sessionStorage.removeItem('pm_admin'); location.reload(); };
+document.getElementById('btn-logout').onclick = async () => {
+  await fetch('/api/logout', { method: 'POST', headers: { 'X-CSRF-Token': getCsrfToken() } }).catch(() => {});
+  sessionStorage.removeItem('pm_user');
+  location.reload();
+};
 
 /* ── Show Dashboard ──────────────────────────────────────── */
 async function showDashboard() {
@@ -343,7 +357,11 @@ settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal)
   const btn = document.getElementById(id);
   if (btn) btn.onclick = () => {
     const input = document.getElementById(id.replace('toggle-', ''));
-    if (input) input.type = input.type === 'password' ? 'text' : 'password';
+    if (!input) return;
+    const isVisible = input.type === 'text';
+    input.type = isVisible ? 'password' : 'text';
+    btn.textContent = isVisible ? '👁' : '🙈';
+    btn.setAttribute('aria-label', isVisible ? 'Show password' : 'Hide password');
   };
 });
 
@@ -361,13 +379,13 @@ async function changePassword() {
   successEl.classList.add('hidden');
 
   if (!currentPw) { errEl.textContent = 'Enter your current password.'; errEl.classList.remove('hidden'); return; }
-  if (newPw.length < 6) { errEl.textContent = 'New password must be at least 6 characters.'; errEl.classList.remove('hidden'); return; }
+  if (newPw.length < 8) { errEl.textContent = 'New password must be at least 8 characters.'; errEl.classList.remove('hidden'); return; }
   if (newPw !== confirmPw) { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
 
   try {
     const res = await fetch('/api/change-password', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrfToken() },
       body: JSON.stringify({ currentPassword: currentPw, newPassword: newPw })
     });
     const data = await res.json();
@@ -549,7 +567,7 @@ async function generate() {
   try {
     const resp = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrfToken() },
       body: JSON.stringify({ systemPrompt: m.system, userPrompt: m.prompt(values), model })
     });
     if (!resp.ok) { const err = await resp.json().catch(() => ({ error: resp.statusText })); throw new Error(err.error || resp.statusText); }
@@ -568,7 +586,8 @@ function renderStreaming(text) {
 }
 function renderFinal(text) {
   outputContent.style.whiteSpace = '';
-  outputContent.innerHTML = window.marked ? marked.parse(text) : escapeHtml(text).replace(/\n/g,'<br>');
+  const html = window.marked ? marked.parse(text) : escapeHtml(text).replace(/\n/g,'<br>');
+  outputContent.innerHTML = window.DOMPurify ? DOMPurify.sanitize(html) : html;
   // Hide bottom save/copy for reference modules (they have inline buttons)
   if (activeModuleId === 'image-prompts') {
     btnCopy.classList.add('hidden'); btnSave.classList.add('hidden');
@@ -596,15 +615,6 @@ function markDone(id) {
 }
 
 /* ── Saved Sessions ──────────────────────────────────────── */
-function getSessions() {
-  return JSON.parse(localStorage.getItem('pm_sessions') || '[]');
-}
-
-function saveSessions(sessions) {
-  localStorage.setItem('pm_sessions', JSON.stringify(sessions));
-  updateSavedCount(sessions.length);
-}
-
 function updateSavedCount(count) {
   const badge = document.getElementById('saved-count');
   const header = document.getElementById('saved-count-header');
@@ -612,90 +622,89 @@ function updateSavedCount(count) {
   if (header) header.textContent = count;
 }
 
-function saveSession() {
+async function saveSession() {
   if (!fullOutput || !activeModuleId) return;
   const m = MODULES.find(x => x.id === activeModuleId);
   if (!m) return;
-  const sessions = getSessions();
-  const ts = new Date();
-  const session = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-    moduleId: m.id,
-    moduleName: m.name,
-    moduleIcon: m.icon,
-    timestamp: ts.toISOString(),
-    date: ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-    output: fullOutput
-  };
-  sessions.unshift(session);
-  saveSessions(sessions);
-  btnSave.textContent = '✓ Saved!';
-  btnSave.classList.add('copied');
-  setTimeout(() => { btnSave.textContent = '💾 Save'; btnSave.classList.remove('copied'); }, 2000);
+
+  try {
+    const resp = await fetch('/api/sessions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': getCsrfToken() },
+      body: JSON.stringify({
+        moduleId: m.id,
+        moduleName: m.name,
+        moduleIcon: m.icon,
+        output: fullOutput
+      })
+    });
+    if (resp.ok) {
+      btnSave.textContent = '✓ Saved!';
+      btnSave.classList.add('copied');
+      setTimeout(() => { btnSave.textContent = '💾 Save'; btnSave.classList.remove('copied'); }, 2000);
+    }
+  } catch { btnSave.textContent = '⚠ Error'; }
 }
 
-function openSaved() {
+async function openSaved() {
   switchView('saved');
   const list = document.getElementById('saved-list');
   const empty = document.getElementById('saved-empty');
   if (!list) return;
-  const sessions = getSessions();
-  if (sessions.length === 0) {
-    list.innerHTML = '';
-    if (empty) empty.classList.remove('hidden');
-    return;
-  }
-  if (empty) empty.classList.add('hidden');
-  list.innerHTML = sessions.map(s => `
-    <div class="saved-card" data-id="${s.id}">
-      <div class="sc-top">
-        <div class="sc-icon">${s.moduleIcon}</div>
-        <div class="sc-info">
-          <div class="sc-name">${s.moduleName}</div>
-          <div class="sc-date">${s.date}</div>
+
+  try {
+    const resp = await fetch('/api/sessions');
+    const sessions = resp.ok ? await resp.json() : [];
+    updateSavedCount(sessions.length);
+
+    if (sessions.length === 0) {
+      list.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      return;
+    }
+    if (empty) empty.classList.add('hidden');
+    list.innerHTML = sessions.map(s => `
+      <div class="saved-card" data-id="${s.id}">
+        <div class="sc-top">
+          <div class="sc-icon">${escapeHtml(s.moduleIcon)}</div>
+          <div class="sc-info">
+            <div class="sc-name">${escapeHtml(s.moduleName)}</div>
+            <div class="sc-date">${escapeHtml(s.date)}</div>
+          </div>
+        </div>
+        <div class="sc-preview">${escapeHtml(s.output.slice(0, 120))}${s.output.length > 120 ? '…' : ''}</div>
+        <div class="sc-actions">
+          <button class="sc-btn sc-load" data-id="${s.id}">📂 Load</button>
+          <button class="sc-btn sc-del" data-id="${s.id}">🗑 Delete</button>
         </div>
       </div>
-      <div class="sc-preview">${escapeHtml(s.output.slice(0, 120))}${s.output.length > 120 ? '…' : ''}</div>
-      <div class="sc-actions">
-        <button class="sc-btn sc-load" data-id="${s.id}">📂 Load</button>
-        <button class="sc-btn sc-del" data-id="${s.id}">🗑 Delete</button>
-      </div>
-    </div>
-  `).join('');
+    `).join('');
 
-  // Wire Load buttons
-  list.querySelectorAll('.sc-load').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      loadSession(btn.dataset.id);
-    };
-  });
-  // Wire Delete buttons
-  list.querySelectorAll('.sc-del').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      deleteSession(btn.dataset.id);
-    };
-  });
+    list.querySelectorAll('.sc-load').forEach(btn => {
+      btn.onclick = (e) => { e.stopPropagation(); loadSavedSession(btn.dataset.id, sessions); };
+    });
+    list.querySelectorAll('.sc-del').forEach(btn => {
+      btn.onclick = (e) => { e.stopPropagation(); deleteSession(btn.dataset.id); };
+    });
+  } catch {
+    list.innerHTML = '<p style="color:var(--muted2)">Failed to load sessions.</p>';
+  }
 }
 
-function loadSession(id) {
-  const sessions = getSessions();
+function loadSavedSession(id, sessions) {
   const s = sessions.find(x => x.id === id);
   if (!s) return;
-  // Open the module
   openModule(s.moduleId);
-  // Set the output
   fullOutput = s.output;
   showOutputArea();
   renderFinal(s.output);
 }
 
-function deleteSession(id) {
-  let sessions = getSessions();
-  sessions = sessions.filter(x => x.id !== id);
-  saveSessions(sessions);
-  openSaved(); // Re-render
+async function deleteSession(id) {
+  try {
+    await fetch('/api/sessions/' + encodeURIComponent(id), { method: 'DELETE', headers: { 'X-CSRF-Token': getCsrfToken() } });
+  } catch {}
+  openSaved();
 }
 
 /* ── Doc Drawer ──────────────────────────────────────────── */
@@ -713,12 +722,13 @@ async function openDrawer(type) {
     const res  = await fetch(`/api/content/${type}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    docsBody.innerHTML = window.marked ? marked.parse(data.content) : `<pre>${data.content}</pre>`;
+    const html = window.marked ? marked.parse(data.content) : `<pre>${escapeHtml(data.content)}</pre>`;
+    docsBody.innerHTML = window.DOMPurify ? DOMPurify.sanitize(html) : html;
     drawerLoader.classList.add('hidden');
     docsBody.classList.remove('hidden');
   } catch (err) {
     drawerLoader.classList.add('hidden');
-    docsBody.innerHTML = `<p style="color:#ef4444">Failed to load: ${err.message}</p>`;
+    docsBody.innerHTML = `<p style="color:#ef4444">Failed to load: ${escapeHtml(err.message)}</p>`;
     docsBody.classList.remove('hidden');
   }
 }
@@ -748,6 +758,11 @@ window.savePrompt = function() {
 };
 
 /* ── Util ────────────────────────────────────────────────── */
+function getCsrfToken() {
+  const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+  return match ? match[1] : '';
+}
+
 function escapeHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
